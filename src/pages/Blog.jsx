@@ -1,133 +1,112 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { Sparkles, Globe, ArrowUpRight, Zap } from 'lucide-react';
 
-const AsymmetricVision = () => {
+const COLORS = {
+  MATRIX_BLACK: "#020202",
+  SYSTEM_RED: "#EC3B2E",
+  CYBER_GREEN: "#00FF66",
+  TEXT_WHITE: "#FFFFFF"
+};
+
+const SECTIONS = [
+  { code: "INIT", title: "GENESIS", data: "WOI_SYSTEM_DEPLOYED_2026", color: COLORS.CYBER_GREEN },
+  { code: "ARCH", title: "STRUCTURE", data: "GLOBAL_INFLUENCE_NODES", color: COLORS.TEXT_WHITE },
+  { code: "EXEC", title: "MOMENTUM", data: "HIGH_VELOCITY_SCALING", color: COLORS.SYSTEM_RED },
+];
+
+export default function TerminalMatrix() {
   const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: containerRef });
   
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
+  // Create a stepped progress for a "digital" feel rather than smooth
+  const stepProgress = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const [activeStep, setActiveStep] = useState(0);
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25 });
-
-  // Parallax Values
-  const leftColumnY = useTransform(smoothProgress, [0, 1], [0, -800]);
-  const rightColumnY = useTransform(smoothProgress, [0, 1], [0, 800]);
-  const centerScale = useTransform(smoothProgress, [0, 0.5], [1, 1.2]);
-  const pinkRotate = useTransform(smoothProgress, [0, 1], [0, 360]);
+  useEffect(() => {
+    return stepProgress.on("change", (v) => {
+      if (v < 33) setActiveStep(0);
+      else if (v < 66) setActiveStep(1);
+      else setActiveStep(2);
+    });
+  }, [stepProgress]);
 
   return (
-    <div ref={containerRef} className="bg-black text-white selection:bg-[#E75893]" style={{ fontFamily: "'Poppins', sans-serif" }}>
+    <div ref={containerRef} className="h-[400vh] bg-[#020202] text-white font-mono selection:bg-[#00FF66] selection:text-black">
       
-      {/* SECTION 1: THE SPLIT ASCENSION (LAVENDER & WHITE) */}
-      <section className="relative h-[150vh] overflow-hidden flex items-center justify-center">
+      {/* 1. THE GRID OVERLAY (Fixed) */}
+      <div className="fixed inset-0 grid grid-cols-4 md:grid-cols-8 grid-rows-8 pointer-events-none opacity-10">
+        {[...Array(64)].map((_, i) => (
+          <div key={i} className="border-[0.5px] border-white/20" />
+        ))}
+      </div>
+
+      {/* 2. THE CENTRAL DATA HUD */}
+      <div className="fixed inset-0 flex flex-col items-center justify-center p-6 md:p-24">
         
-        {/* Left Floating Track */}
-        <motion.div style={{ y: leftColumnY }} className="absolute left-[5%] top-20 w-[20%] space-y-20 opacity-40 hidden md:block">
-          <div className="h-96 bg-[#6B66E1] border border-white/20" />
-          <div className="h-64 bg-zinc-900 border border-white/10" />
-          <div className="h-96 bg-[#026F43] border border-white/20" />
-        </motion.div>
+        {/* Dynamic Background ID */}
+        <h1 className="fixed text-[30vw] font-black opacity-[0.03] italic pointer-events-none">
+          {SECTIONS[activeStep].code}
+        </h1>
 
-        {/* Right Floating Track */}
-        <motion.div style={{ y: rightColumnY }} className="absolute right-[5%] top-[-50%] w-[20%] space-y-20 opacity-40 hidden md:block">
-          <div className="h-64 bg-zinc-900 border border-white/10" />
-          <div className="h-96 bg-[#E75893] border border-white/20" />
-          <div className="h-96 bg-[#F6982F] border border-white/20" />
-        </motion.div>
+        <div className="relative w-full max-w-6xl">
+          <motion.div 
+            key={activeStep}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="space-y-4"
+          >
+            <div className="flex items-center gap-4">
+               <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: SECTIONS[activeStep].color }} />
+               <span className="text-xs tracking-[0.6em] opacity-40 uppercase">Sector_Analysis_0{activeStep + 1}</span>
+            </div>
 
-        <div className="z-10 text-center max-w-4xl px-6">
-          <motion.div style={{ scale: centerScale }}>
-            <h1 className="text-[12vw] font-black leading-none mb-4">
-              THE <br /> <span className="text-[#6B66E1]">ARCHITECT</span>
-            </h1>
-            <p className="text-xl tracking-[0.5em] uppercase font-light text-zinc-500">Visionary Foundations</p>
+            <h2 className="text-7xl md:text-[10vw] font-black italic uppercase leading-none tracking-tighter">
+                {SECTIONS[activeStep].title}
+            </h2>
+
+            <div className="flex flex-col md:flex-row gap-8 pt-12 items-start md:items-center justify-between border-t border-white/10">
+                <p className="text-xl font-light opacity-50 max-w-md">
+                   {SECTIONS[activeStep].data}
+                </p>
+                <div className="flex gap-4">
+                    <button className="px-8 py-3 border border-white hover:bg-white hover:text-black transition-all text-[10px] font-bold tracking-[0.4em] uppercase">
+                        Access_Nodes
+                    </button>
+                    <button className="px-8 py-3 bg-white text-black text-[10px] font-bold tracking-[0.4em] uppercase">
+                        Protocol_X
+                    </button>
+                </div>
+            </div>
           </motion.div>
         </div>
-      </section>
+      </div>
 
-      {/* SECTION 2: THE OFFSET CONTENT (PINK & FOREST GREEN) */}
-      <section className="min-h-screen py-40 px-6 relative bg-white text-black">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-24 items-start">
-            
-            {/* Column 1: Image/Graphic with Parallax */}
-            <motion.div 
-              initial={{ x: -100, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
-              className="relative"
-            >
-              <div className="bg-[#E75893] w-full aspect-[3/4] p-12 flex items-center justify-center relative z-10">
-                <motion.div style={{ rotate: pinkRotate }}>
-                   <Sparkles size={180} className="text-white" />
-                </motion.div>
-              </div>
-              <div className="absolute -bottom-10 -right-10 w-full h-full bg-[#026F43] -z-10" />
-            </motion.div>
+      {/* 3. SIDEBAR TELEMETRY */}
+      <div className="fixed top-12 left-12 bottom-12 w-px bg-white/10 hidden md:block">
+         <motion.div 
+            style={{ height: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]) }}
+            className="w-full bg-[#00FF66] shadow-[0_0_10px_#00FF66]"
+         />
+      </div>
 
-            {/* Column 2: Text that "overtakes" the scroll */}
-            <div className="pt-20">
-              <span className="text-xs font-black uppercase tracking-widest bg-black text-white px-2 py-1">Philosophy 01</span>
-              <h2 className="text-6xl font-bold mt-6 mb-10 leading-tight">
-                Disrupting the <br /> <span className="italic underline decoration-[#E75893]">Status Quo</span>
-              </h2>
-              <p className="text-2xl leading-relaxed text-zinc-700 mb-8">
-                "We don't look for gaps in the market. We create entirely new landscapes where the market didn't know it could exist."
-              </p>
-              <hr className="border-black mb-8" />
-              <div className="flex justify-between items-center group cursor-pointer">
-                <span className="text-xl font-bold">Read the Manifesto</span>
-                <div className="p-4 bg-black text-white rounded-full group-hover:rotate-45 transition-transform">
-                  <ArrowUpRight size={24} />
-                </div>
-              </div>
-            </div>
+      <div className="fixed top-12 right-12 text-right space-y-2 opacity-30">
+         <p className="text-[8px] tracking-[0.3em]">CORE_TEMP: 32°C</p>
+         <p className="text-[8px] tracking-[0.3em]">BUFFER: 100%</p>
+         <p className="text-[8px] tracking-[0.3em]">UPLINK: ENCRYPTED</p>
+      </div>
 
+      {/* 4. FOOTER LOGS */}
+      <div className="fixed bottom-12 left-12 right-12 flex justify-between items-end">
+          <div className="font-mono text-[10px] space-y-1">
+             <p className="opacity-20 uppercase tracking-widest text-[8px]">Current_Task</p>
+             <p className="text-[#00FF66]">Executing_{SECTIONS[activeStep].title}_Deployment...</p>
           </div>
-        </div>
-      </section>
-
-      {/* SECTION 3: THE TERMINAL EXIT (VIBRANT PINK & MANGO) */}
-      <section className="h-screen bg-black flex flex-col items-center justify-center overflow-hidden">
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="grid grid-cols-2 md:grid-cols-4 w-full border-t border-b border-zinc-800"
-        >
-          {[
-            { label: "Stability", val: "99%", color: "#026F43" },
-            { label: "Vision", val: "∞", color: "#F6982F" },
-            { label: "Speed", val: "MAX", color: "#E75893" },
-            { label: "Input", val: "LIVE", color: "#2261F3" }
-          ].map((stat, i) => (
-            <div key={i} className="p-10 border-r border-zinc-800 flex flex-col items-center">
-              <span className="text-[10px] uppercase tracking-widest text-zinc-500 mb-2">{stat.label}</span>
-              <span className="text-4xl font-black" style={{ color: stat.color }}>{stat.val}</span>
-            </div>
-          ))}
-        </motion.div>
-
-        <div className="mt-24 text-center">
-          <h3 className="text-4xl md:text-6xl font-black mb-12">CHART THE UNKNOWN</h3>
-          <motion.button 
-            whileHover={{ scale: 1.1, letterSpacing: "4px" }}
-            className="px-16 py-6 border-2 border-[#F6982F] text-[#F6982F] font-black uppercase text-xl hover:bg-[#F6982F] hover:text-black transition-all"
-          >
-            Connect with Founder
-          </motion.button>
-        </div>
-
-        {/* Floating UI Elements */}
-        <div className="absolute top-10 right-10 flex items-center gap-4 text-zinc-500">
-           <Zap size={16} />
-           <span className="text-[10px] font-mono tracking-tighter">SYSTEMS_ACTIVE_2026</span>
-        </div>
-      </section>
+          <div className="text-8xl font-black italic tracking-tighter opacity-10">
+            {Math.round(scrollYProgress.get() * 100)}%
+          </div>
+      </div>
 
     </div>
   );
-};
-
-export default AsymmetricVision;
+}

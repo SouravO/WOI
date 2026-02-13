@@ -1,156 +1,224 @@
-import React from 'react';
-import { 
-  Terminal, 
-  Linkedin, 
-  Facebook, 
-  Instagram, 
-  Youtube, 
-  ShieldCheck, 
-  Activity, 
-  Cpu,
-  Globe
-} from 'lucide-react';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { MoveRight, Smartphone, Mail, Globe, Hash, Layers, Target, Cpu, Zap } from 'lucide-react';
 
-const WOIIndustrialFooter = () => {
-  const currentYear = new Date().getFullYear();
-
-  // Mapping the requested hex codes
-  const BRAND = {
-    FOREST_GREEN: "#026F43",
-    ELECTRIC_BLUE: "#2261F3",
-    DARK_LAVENDER: "#6B66E1",
-    CORAL_PINK: "#C67CB8",
-    WHITE: "#FFFFFF",
-    MANGO: "#F6982F",
-    BRICK_RED: "#EC3B2E",
-    VIBRANT_PINK: "#E75893"
-  };
-
-  return (
-    <footer className="text-white font-mono border-t-[12px]" style={{ backgroundColor: '#000', borderColor: '#000' }}>
-      
-      {/* 1. KINETIC STATUS BAR */}
-      <div className="flex flex-col md:row border-b border-white/10" style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
-        <div 
-          className="px-8 py-3 flex items-center gap-3 font-black text-xs uppercase italic tracking-widest text-white"
-          style={{ backgroundColor: BRAND.VIBRANT_PINK }}
-        >
-          <Activity size={16} className="animate-pulse" />
-          WOI_CORE: OPERATIONAL
-        </div>
-        <div className="flex-1 px-8 py-3 flex items-center gap-6 overflow-hidden border-l border-white/10">
-          <span className="text-[10px] text-white/60 uppercase whitespace-nowrap flex items-center gap-2">
-            <Cpu size={12} style={{ color: BRAND.MANGO }} /> 
-            Node: BENGALURU_MAIN_UNIT
-          </span>
-          <span className="text-[10px] text-white/60 uppercase whitespace-nowrap flex items-center gap-2">
-            <Globe size={12} style={{ color: BRAND.ELECTRIC_BLUE }} /> 
-            Network: GLOBAL_DECENTRALIZED
-          </span>
-          <div className="hidden lg:flex gap-1 ml-auto">
-             {[...Array(8)].map((_, i) => (
-               <div key={i} className="w-3 h-1" style={{ backgroundColor: i < 6 ? BRAND.ELECTRIC_BLUE : 'rgba(255,255,255,0.1)' }} />
-             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* 2. THE INFRASTRUCTURE GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-12" style={{ backgroundColor: BRAND.FOREST_GREEN }}>
-        
-        {/* WOI IDENTITY COLUMN */}
-        <div className="md:col-span-5 p-8 md:p-12 border-b md:border-b-0 md:border-r border-white/10">
-          <div className="flex items-center gap-4 mb-8">
-            <div 
-              className="p-2 skew-x-[-12deg]" 
-              style={{ backgroundColor: BRAND.WHITE, boxShadow: `4px 4px 0px ${BRAND.VIBRANT_PINK}` }}
-            >
-               <Terminal size={28} style={{ color: BRAND.FOREST_GREEN }} />
-            </div>
-            <h3 className="text-4xl font-[1000] uppercase tracking-tighter leading-none text-white">
-              WORLD OF <br/> <span style={{ color: BRAND.MANGO }}>IQUE.</span>
-            </h3>
-          </div>
-          <p className="text-xs leading-relaxed text-white/80 max-w-sm uppercase font-bold tracking-tight">
-            Integrated architecture for decentralized holdings. 
-            We build the systems that power the next evolution of digital sovereignty.
-          </p>
-          
-          {/* WOI SOCIAL INTERFACE */}
-          <div className="mt-10 flex gap-3">
-            {[Linkedin, Facebook, Instagram, Youtube].map((Icon, i) => (
-              <a 
-                key={i} 
-                href="#" 
-                className="p-4 border border-white/20 transition-all group hover:text-white"
-                style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = BRAND.ELECTRIC_BLUE}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.2)'}
-              >
-                <Icon size={20} />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        {/* PROTOCOL NAVIGATION */}
-        <div className="md:col-span-4 p-8 md:p-12 border-b md:border-b-0 md:border-r border-white/10" style={{ backgroundColor: BRAND.DARK_LAVENDER }}>
-          <p className="text-[10px] font-black tracking-[0.3em] uppercase mb-8" style={{ color: BRAND.MANGO }}>System_Directory</p>
-          <ul className="space-y-4">
-            {['Infrastructures', 'Holdings', 'Security_Vault', 'Governance', 'Operational_FAQ'].map((item) => (
-              <li key={item} className="group flex items-center gap-2 cursor-pointer">
-                <div className="w-2 h-2 bg-white/40 group-hover:scale-125 transition-transform" style={{ backgroundColor: BRAND.WHITE }} />
-                <span className="text-sm font-black uppercase tracking-tighter transition-all text-white/70 group-hover:text-white">
-                  {item}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* AUTHENTICATION COLUMN */}
-        <div className="md:col-span-3 p-8 md:p-12 flex flex-col justify-between" style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}>
-          <div className="space-y-6">
-            <div className="flex items-center gap-2" style={{ color: BRAND.MANGO }}>
-              <ShieldCheck size={20} />
-              <span className="text-[10px] font-black uppercase italic">Verified_Architecture</span>
-            </div>
-            <div className="p-4 border border-white/10" style={{ backgroundColor: BRAND.FOREST_GREEN }}>
-              <p className="text-[9px] text-white/60 uppercase leading-tight font-bold">
-                Transmission Source: <br/>
-                <span className="text-white">WOI-SRV-0922</span>
-              </p>
-            </div>
-          </div>
-          
-          <div className="mt-12 text-right">
-             <div className="h-[4px] w-12 ml-auto mb-4" style={{ backgroundColor: BRAND.BRICK_RED }} />
-             <p className="text-[10px] font-bold text-white/40 uppercase tracking-[0.4em]">UNIT_EST_2026</p>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. TERMINAL BASE STRIP */}
-      <div 
-        className="text-black px-8 py-5 flex flex-col sm:row justify-between items-center gap-4"
-        style={{ backgroundColor: BRAND.WHITE }}
-      >
-        <div className="flex items-center gap-4 font-black">
-           <span className="text-[10px] uppercase tracking-tighter" style={{ color: BRAND.FOREST_GREEN }}>
-             © {currentYear} World of iQue Holdings // Architectural Layer 4.0
-           </span>
-        </div>
-        <div className="flex gap-8">
-           <button className="text-[10px] font-black uppercase transition-colors italic underline decoration-2" style={{ color: BRAND.ELECTRIC_BLUE }}>
-             Legal_Protocols
-           </button>
-           <button className="text-[10px] font-black uppercase transition-colors italic underline decoration-2" style={{ color: BRAND.BRICK_RED }}>
-             Security_Privacy
-           </button>
-        </div>
-      </div>
-    </footer>
-  );
+const COLORS = {
+  FOREST_GREEN: "#026F43",
+  ELECTRIC_BLUE: "#2261F3",
+  DARK_LAVENDER: "#6B66E1",
+  CORAL_PINK: "#C67CB8",
+  VIBRANT_PINK: "#E75893",
+  BRICK_RED: "#EC3B2E",
+  MANGO_YELLOW: "#F6982F",
+  WHITE: "#FFFFFF"
 };
 
-export default WOIIndustrialFooter;
+// SVG Grain Component for texture
+const GrainFilter = () => (
+  <svg className="sr-only" width="0" height="0">
+    <filter id="grainy">
+      <feTurbulence type="fractalNoise" baseFrequency="0.60" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+  </svg>
+);
+
+export default function DraftingTablePortal() {
+  const scrollRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: scrollRef });
+
+  // Transform vertical scroll into horizontal movement
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-66.6%"]);
+  const springX = useSpring(x, { stiffness: 100, damping: 30 });
+
+  return (
+    <div ref={scrollRef} className="relative h-[300vh] bg-[#050505] text-white selection:bg-white selection:text-black">
+      <GrainFilter />
+      
+      <div className="sticky top-0 h-screen w-full overflow-hidden border-y border-white/10">
+        
+        {/* 0. GLOBAL TEXTURE LAYER */}
+        <div className="absolute inset-0 pointer-events-none z-0">
+          <div 
+            className="absolute inset-0 opacity-[0.05]" 
+            style={{ 
+              backgroundImage: `linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)`,
+              backgroundSize: '60px 60px' 
+            }} 
+          />
+          <div className="absolute inset-0 opacity-[0.15] mix-blend-overlay" style={{ filter: 'url(#grainy)' }} />
+        </div>
+
+        {/* TOP RULER DECORATION */}
+        <div className="absolute top-0 left-0 w-full h-12 border-b border-white/10 flex items-center px-4 gap-12 z-20 bg-[#050505]">
+            {[...Array(15)].map((_, i) => (
+                <span key={i} className="text-[9px] font-mono opacity-30 tracking-tighter">
+                  {i < 10 ? `0${i}` : i}_SYS_LAYER_{i * 100}
+                </span>
+            ))}
+        </div>
+
+        <motion.div style={{ x: springX }} className="flex h-full w-[300vw] relative z-10">
+          
+          {/* SECTION 01: THE CORE DATA */}
+          <section className="w-screen h-full flex items-center px-12 md:px-32 border-r border-white/10 relative">
+            <div className="max-w-2xl space-y-12">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-3 px-3 py-1 bg-white/5 border border-white/10 rounded-full">
+                    <Layers size={14} style={{ color: COLORS.ELECTRIC_BLUE }} />
+                    <span className="text-[10px] font-mono uppercase tracking-[0.3em] opacity-60">Node_01 // Structural_Data</span>
+                </div>
+                <h2 className="text-7xl font-black uppercase tracking-tighter italic leading-none">
+                  Liaison <br/> <span style={{ color: COLORS.ELECTRIC_BLUE }}>Protocols</span>
+                </h2>
+              </div>
+              
+              <div className="grid grid-cols-1 gap-10">
+                 <LinkItem icon={<Smartphone />} label="Direct_Line" value="+91-9036354727" color={COLORS.ELECTRIC_BLUE} />
+                 <LinkItem icon={<Mail />} label="Secure_Uplink" value="info@woi.com" color={COLORS.VIBRANT_PINK} />
+                 <LinkItem icon={<Globe />} label="Geographic_Base" value="Bengaluru, IN" color={COLORS.MANGO_YELLOW} />
+              </div>
+              
+              <div className="flex items-center gap-4 opacity-40 group">
+                <span className="text-[10px] font-mono uppercase tracking-widest group-hover:translate-x-2 transition-transform">Lateral Scroll to Proceed</span>
+                <MoveRight size={16} />
+              </div>
+            </div>
+          </section>
+
+          {/* SECTION 02: THE TRANSMISSION CONSOLE */}
+          <section className="w-screen h-full flex items-center px-12 md:px-32 border-r border-white/10 bg-white/[0.02] backdrop-blur-3xl relative">
+            <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-24 relative z-10">
+                <div className="space-y-8">
+                    <div className="text-4xl font-black italic tracking-tighter" style={{ color: COLORS.VIBRANT_PINK }}>02.</div>
+                    <h2 className="text-7xl font-black uppercase tracking-tighter leading-[0.9]">Architectural <br/> Request.</h2>
+                    <p className="text-lg font-light opacity-50 leading-relaxed max-w-md">
+                        Submit your venture architecture for structural analysis. 
+                        Our team evaluates for systemic gaps and liquidity alignment.
+                    </p>
+                    <div className="flex gap-4 font-mono text-[9px] uppercase tracking-widest opacity-40">
+                      <span>Status: Receiving_Active</span>
+                      <span className="animate-pulse text-green-500">●</span>
+                    </div>
+                </div>
+
+                <form className="space-y-12 bg-white/5 p-12 border border-white/10 backdrop-blur-md">
+                    <DraftInput label="Venture_Identity" placeholder="NAME / CODE" color={COLORS.VIBRANT_PINK} />
+                    <DraftInput label="Comms_Channel" placeholder="EMAIL_ADDRESS" color={COLORS.ELECTRIC_BLUE} />
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-mono font-bold uppercase tracking-widest opacity-50">Project_Objective</label>
+                        <textarea className="w-full bg-transparent border-b border-white/10 py-4 text-xl font-light text-white outline-none focus:border-white transition-colors h-24 resize-none placeholder:opacity-10" placeholder="DESCRIBE THE SYSTEMIC GAP..." />
+                    </div>
+                    <button className="w-full bg-white text-black py-6 font-black uppercase text-xs tracking-[0.4em] hover:invert transition-all active:scale-95">
+                        Execute_Uplink
+                    </button>
+                </form>
+            </div>
+          </section>
+
+          {/* SECTION 03: THE GEOSPATIAL MAP */}
+          <section className="w-screen h-full flex items-center px-12 md:px-32 relative overflow-hidden">
+            
+            {/* FULL SCREEN MAP BACKGROUND */}
+            <div className="absolute inset-0 z-0">
+                <iframe 
+                    title="Geospatial Node"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d124440.2312211626!2d77.51401316527415!3d12.9715987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sBengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1700000000000" 
+                    className="w-full h-full scale-110"
+                    style={{ 
+                        filter: 'grayscale(1) invert(1) contrast(1.2) opacity(0.25)',
+                        border: 0 
+                    }} 
+                />
+                {/* Visual Blending Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-transparent to-[#050505] opacity-90" />
+                <div className="absolute inset-0 bg-[#050505]/50" />
+                <div 
+                    className="absolute inset-0 opacity-[0.07] pointer-events-none" 
+                    style={{ 
+                    backgroundImage: `linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)`,
+                    backgroundSize: '60px 60px' 
+                    }} 
+                />
+            </div>
+            
+            <div className="relative z-10 bg-black/60 backdrop-blur-3xl border border-white/10 p-16 max-w-2xl">
+                <div className="flex items-center gap-4 mb-10">
+                    <Target style={{ color: COLORS.MANGO_YELLOW }} size={32} />
+                    <span className="text-[10px] font-mono font-black uppercase tracking-[0.5em]">Target_Acquired</span>
+                </div>
+                <h2 className="text-6xl font-black uppercase tracking-tighter mb-8 leading-none">
+                    Bengaluru <br/> <span style={{ color: COLORS.MANGO_YELLOW }}>Headquarters</span>
+                </h2>
+                <p className="text-xl font-light opacity-60 leading-relaxed mb-12 uppercase tracking-wide">
+                    Operating out of India's Silicon Valley. The heart of the venture ecosystem. 
+                    Drop by for a high-bandwidth physical sync.
+                </p>
+                <div className="flex justify-between items-end border-t border-white/10 pt-8">
+                  <div className="font-mono text-[10px] tracking-widest" style={{ color: COLORS.MANGO_YELLOW }}>
+                    12.9716° N <br/> 77.5946° E
+                  </div>
+                  <button className="px-8 py-3 border border-white/20 font-black uppercase text-[10px] tracking-widest hover:bg-white hover:text-black transition-all">
+                    Navigate_To_Node
+                  </button>
+                </div>
+            </div>
+
+            <h2 className="absolute bottom-12 right-12 text-[18vw] font-black opacity-[0.03] uppercase italic select-none pointer-events-none">
+                NODE_03
+            </h2>
+          </section>
+
+        </motion.div>
+
+        {/* BOTTOM HUD */}
+        <div className="absolute bottom-0 left-0 w-full h-16 border-t border-white/10 flex items-center px-12 justify-between z-20 bg-[#050505]">
+            <div className="flex gap-6 items-center">
+                {[0, 1, 2].map((i) => (
+                    <div key={i} className="w-12 h-[2px] bg-white/10 overflow-hidden relative">
+                        <motion.div 
+                            className="absolute inset-0"
+                            style={{ 
+                              backgroundColor: i === 0 ? COLORS.ELECTRIC_BLUE : i === 1 ? COLORS.VIBRANT_PINK : COLORS.MANGO_YELLOW,
+                              scaleX: useTransform(scrollYProgress, [i * 0.33, (i + 1) * 0.33], [0, 1])
+                            }}
+                        />
+                    </div>
+                ))}
+                <span className="font-mono text-[9px] opacity-40 uppercase tracking-widest ml-4">Architecture_Map_v2.0</span>
+            </div>
+            <div className="hidden md:flex gap-8 font-mono text-[9px] opacity-40 uppercase tracking-widest">
+              <span>Latency: 24ms</span>
+              <span>Encrypted: AES-256</span>
+              <span className="text-white/20">WOI_PORTAL_STABLE</span>
+            </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Sub-components
+function LinkItem({ icon, label, value, color }) {
+    return (
+        <div className="flex items-center gap-8 group cursor-pointer border-l-2 border-transparent hover:border-white pl-0 hover:pl-6 transition-all duration-500">
+            <div style={{ color }} className="transition-transform duration-500 group-hover:scale-125">{icon}</div>
+            <div>
+                <p className="text-[10px] font-mono uppercase tracking-[0.2em] opacity-40 mb-1">{label}</p>
+                <p className="text-2xl font-black tracking-tight uppercase italic leading-none">{value}</p>
+            </div>
+        </div>
+    );
+}
+
+function DraftInput({ label, placeholder, color }) {
+    return (
+        <div className="space-y-4">
+            <label className="text-[10px] font-mono font-bold uppercase tracking-widest opacity-50" style={{ color }}>{label}</label>
+            <input 
+              className="w-full bg-transparent border-b border-white/10 py-4 text-2xl font-black uppercase tracking-tighter text-white outline-none focus:border-white transition-colors placeholder:opacity-5" 
+              placeholder={placeholder} 
+            />
+        </div>
+    );
+}

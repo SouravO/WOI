@@ -1,167 +1,131 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, Layers, Mail, BookOpenText } from 'lucide-react';
-
-import Chatbot from './Chatbot';
-import SnakeGame from './SnakeGame';
+import { 
+  Home, Layers, Mail, BookOpenText, 
+  Menu, X, ArrowRight, Activity,
+  Bot, Gamepad2 // <-- Added icons
+} from 'lucide-react';
 
 const navItems = [
-  { name: 'Home', path: '/', icon: Home, color: 'from-fuchsia-500 to-purple-600', shadow: 'shadow-fuchsia-500/40' },
-  { name: 'About', path: '/about', icon: BookOpenText, color: 'from-orange-400 to-red-500', shadow: 'shadow-orange-500/40' },
-  { name: 'Gallery', path: '/blog', icon: Layers, color: 'from-cyan-400 to-blue-500', shadow: 'shadow-cyan-500/40' },
-  { name: 'Contact', path: '/contact', icon: Mail, color: 'from-emerald-400 to-teal-500', shadow: 'shadow-emerald-500/40' },
+  { name: 'Home', path: '/', icon: Home, code: 'NAV-01' },
+  { name: 'About', path: '/about', icon: BookOpenText, code: 'NAV-02' },
+  // { name: 'Gallery', path: '/blog', icon: Layers, code: 'NAV-03' },
+  // { name: 'AI Abot', path: '/chatbot', icon: Bot, code: 'NAV-05' }, // updated path
+  // { name: 'SnakeGame', path: '/SnakeGame', icon: Gamepad2, code: 'NAV-06' }, // updated path
+  { name: 'Contact', path: '/contact', icon: Mail, code: 'NAV-04' },
 ];
 
-const VibrantAdaptiveNav = ({ isLightBg = true }) => {
-  const [hovered, setHovered] = useState(null);
+const FullWidthNav = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-
-  // Theme logic based on background color
-  const borderColor = isLightBg ? 'border-white/10' : 'border-white/20';
+  const navigate = useNavigate();
 
   return (
-    <>
-      {/* --- DESKTOP NAVIGATION (Right Side) --- */}
-      <nav className="fixed right-8 top-1/2 -translate-y-1/2 z-[100] hidden lg:block">
-        <motion.div
-          animate={{ backgroundColor: isLightBg ? 'rgba(24, 24, 27, 0.9)' : 'rgba(255, 255, 255, 0.1)' }}
-          className={`relative flex flex-col gap-3 p-4 rounded-[2.5rem] backdrop-blur-3xl border ${borderColor} shadow-2xl transition-colors duration-500`}
+    <nav className="fixed top-0 left-0 right-0 z-[150] bg-white text-black font-mono border-b-[12px] border-black">
+      <div className="max-w-[1800px] mx-auto flex items-stretch justify-between h-20 md:h-24">
+        
+        {/* LOGO SECTION */}
+        <Link 
+          to="/" 
+          className="flex items-center px-6 md:px-12 border-r-[1px] border-black hover:bg-[#F2F2F2] transition-colors group"
         >
-          {/* Animated Background Blob for Desktop */}
-          <AnimatePresence>
-            {hovered !== null && (
-              <motion.div
-                layoutId="vibrant-blob"
-                className={`absolute left-2.5 right-2.5 z-0 rounded-2xl bg-gradient-to-br shadow-lg ${navItems[hovered].color} ${navItems[hovered].shadow}`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ type: "spring", stiffness: 400, damping: 28 }}
-                style={{
-                  height: '52px',
-                  top: hovered * 64 + 16, // Adjusted for standard w-12/h-12 spacing
-                }}
-              />
-            )}
-          </AnimatePresence>
+          <span className="text-3xl md:text-4xl font-black tracking-tighter uppercase">
+            woi<span className="text-[#026F43]">.</span>
+          </span>
+        </Link>
 
-          {navItems.map((item, idx) => {
+        {/* DESKTOP NAV - TABLE STYLE */}
+        <div className="hidden md:flex flex-1">
+          {navItems.map((item) => {
             const isActive = location.pathname === item.path;
-            const Icon = item.icon;
-            const isHovered = hovered === idx;
-
             return (
-              <Link
-                key={item.name}
-                to={item.path}
-                onMouseEnter={() => setHovered(idx)}
-                onMouseLeave={() => setHovered(null)}
-                className="relative z-10 w-12 h-12 flex items-center justify-center"
+              <Link 
+                key={item.name} 
+                to={item.path} 
+                className={`flex-1 flex flex-col justify-center items-center px-6 border-r-[1px] border-black transition-all group relative overflow-hidden
+                  ${isActive ? 'bg-black text-white' : 'bg-white text-black hover:bg-[#F2F2F2]'}`}
               >
-                <motion.div
-                  animate={{
-                    scale: isHovered || isActive ? 1.15 : 1,
-                    color: (isHovered || isActive) ? "#ffffff" : (isLightBg ? "#71717a" : "#ffffff66")
-                  }}
-                >
-                  <Icon size={22} strokeWidth={isActive ? 2.5 : 2} />
-                </motion.div>
-
-                {/* Tooltip */}
-                <AnimatePresence>
-                  {isHovered && (
-                    <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: -25 }}
-                      exit={{ opacity: 0, x: 20 }}
-                      className="absolute right-full mr-6 px-4 py-2 rounded-xl bg-zinc-900 text-white text-[10px] font-black uppercase tracking-widest shadow-2xl border border-white/10 whitespace-nowrap"
-                    >
-                      <span className={`bg-gradient-to-r ${item.color} bg-clip-text text-transparent`}>
-                        {item.name}
-                      </span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Active Indicator */}
+                <span className="text-[10px] uppercase opacity-40 mb-1 group-hover:opacity-100 transition-opacity">
+                  {item.code}
+                </span>
+                <span className="flex items-center gap-2 text-sm font-black uppercase tracking-widest">
+                  <item.icon size={16} /> {/* Show icon beside label */}
+                  [ {item.name} ]
+                </span>
+                {/* Subtle Scanline Effect on Active */}
                 {isActive && (
-                  <motion.div
-                    layoutId="active-indicator"
-                    className={`absolute -right-1.5 w-1.5 h-6 rounded-full bg-gradient-to-b ${item.color}`}
-                  />
+                  <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
                 )}
               </Link>
             );
           })}
+        </div>
 
-          <div className={`h-[1px] w-8 mx-auto my-1 rounded-full ${isLightBg ? 'bg-white/10' : 'bg-white/20'}`} />
-
-          <div className="flex flex-col items-center gap-3">
-            <div className="cursor-pointer transform transition-transform hover:scale-110">
-              <Chatbot />
-            </div>
-            <div className="cursor-pointer transform transition-transform hover:scale-110">
-              <SnakeGame />
-            </div>
+        {/* STATUS & CTA SECTION */}
+        {/* <div className="hidden xl:flex items-center px-8 border-r-[1px] border-black gap-4">
+          <Activity size={16} className="text-[#026F43]" />
+          <div className="leading-none">
+            <p className="text-[10px] font-black uppercase">System_Live</p>
+            <p className="text-[10px] uppercase opacity-40">Node: 2026.RT</p>
           </div>
-        </motion.div>
-      </nav>
+        </div> */}
 
-      {/* --- MOBILE NAVIGATION (Bottom Bar) --- */}
-      <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[99] lg:hidden w-full px-4 flex justify-center">
-        <motion.div
-          animate={{ backgroundColor: isLightBg ? 'rgba(24, 24, 27, 0.95)' : 'rgba(255, 255, 255, 0.1)' }}
-          className={`relative flex items-center justify-between gap-2 px-4 py-2 rounded-full backdrop-blur-3xl border ${borderColor} shadow-2xl max-w-full overflow-hidden`}
+        {/* PRIMARY ACTION BUTTON (MATCHES FOOTER INITIATE BUTTON) */}
+        <div className="hidden md:flex items-center px-8">
+          <button 
+            onClick={() => navigate('/contact')}
+            className="bg-black text-white px-8 py-4 text-xs font-black uppercase tracking-[0.2em] flex items-center gap-4 hover:invert transition-all"
+          >
+            Initiate <ArrowRight size={16} />
+          </button>
+        </div>
+
+        {/* MOBILE TOGGLE */}
+        <button 
+          className="md:hidden px-6 flex items-center justify-center border-l-[1px] border-black"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
-          <div className="flex items-center gap-1 sm:gap-2">
-            {navItems.map((item) => {
-              const isActive = location.pathname === item.path;
-              const Icon = item.icon;
+          {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+        </button>
+      </div>
 
-              return (
+      {/* MOBILE MENU - FULL SCREEN OVERLAY */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: 'auto' }}
+            exit={{ height: 0 }}
+            className="absolute top-full left-0 right-0 bg-white border-b-[1px] border-black overflow-hidden md:hidden"
+          >
+            <div className="flex flex-col">
+              {navItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className="relative z-10 w-11 h-11 flex-shrink-0 flex items-center justify-center"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-8 border-b-[1px] border-black flex justify-between items-center hover:bg-black hover:text-white transition-colors"
                 >
-                  <motion.div
-                    animate={{
-                      scale: isActive ? 1.2 : 1,
-                      color: isActive ? "#ffffff" : (isLightBg ? "#71717a" : "#ffffff66")
-                    }}
-                  >
-                    <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
-                  </motion.div>
-
-                  {/* Active Indicator - Horizontal for Mobile */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="active-indicator-mobile"
-                      className={`absolute -bottom-1 w-5 h-1 rounded-full bg-gradient-to-r ${item.color}`}
-                    />
-                  )}
+                  <div className="flex flex-col">
+                    <span className="text-[10px] uppercase opacity-50">{item.code}</span>
+                    <span className="text-2xl font-black uppercase tracking-tighter flex items-center gap-2">
+                      <item.icon size={24} /> {item.name}
+                    </span>
+                  </div>
                 </Link>
-              );
-            })}
-          </div>
-
-          {/* Separator */}
-          <div className={`w-[1px] h-6 flex-shrink-0 ${isLightBg ? 'bg-white/10' : 'bg-white/20'}`} />
-
-          {/* Special Buttons (Chat & Game) */}
-          <div className="flex items-center gap-1">
-            <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center scale-90 sm:scale-100 cursor-pointer transform transition-transform hover:scale-110">
-               <Chatbot />
+              ))}
+              <div className="p-8 bg-[#F2F2F2]">
+                 <button className="w-full bg-black text-white px-8 py-6 text-sm font-black uppercase tracking-[0.2em] flex justify-between items-center transition-all">
+                  Initiate System <ArrowRight size={20} />
+                </button>
+              </div>
             </div>
-            <div className="w-11 h-11 flex-shrink-0 flex items-center justify-center scale-90 sm:scale-100 cursor-pointer transform transition-transform hover:scale-110">
-               <SnakeGame />
-            </div>
-          </div>
-        </motion.div>
-      </nav>
-    </>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
   );
 };
 
-export default VibrantAdaptiveNav;
+export default FullWidthNav;

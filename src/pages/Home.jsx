@@ -13,6 +13,16 @@ const COLORS = {
   WHITE: "#FFFFFF"
 };
 
+// SVG Grain Component for texture
+const GrainFilter = () => (
+  <svg className="sr-only" width="0" height="0">
+    <filter id="grainy">
+      <feTurbulence type="fractalNoise" baseFrequency="0.60" numOctaves="3" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+    </filter>
+  </svg>
+);
+
 const ArchitectureLayer = ({ title, subtitle, content, icon: Icon, progress, range, color }) => {
   const opacity = useTransform(progress, range, [0, 1, 1, 0]);
   const y = useTransform(progress, range, [100, 0, 0, -100]);
@@ -25,7 +35,7 @@ const ArchitectureLayer = ({ title, subtitle, content, icon: Icon, progress, ran
     >
       <div className="max-w-4xl w-full text-center pointer-events-auto">
         <div className="flex justify-center mb-8">
-            <div className="p-6 rounded-full bg-white/5 border border-white/10" style={{ color }}>
+            <div className="p-6 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm" style={{ color }}>
                 <Icon size={48} strokeWidth={1.5} />
             </div>
         </div>
@@ -59,8 +69,26 @@ export default function WOISingularity() {
   ]);
 
   return (
-    <div ref={containerRef} className="h-[1200vh] bg-[#050505] text-white overflow-hidden">
+    <div ref={containerRef} className="relative h-[1200vh] bg-[#050505] text-white overflow-hidden selection:bg-white selection:text-black">
+      <GrainFilter />
       
+      {/* 0. GLOBAL TEXTURE LAYER */}
+      <div className="fixed inset-0 pointer-events-none z-[1]">
+        {/* The Blueprint Grid */}
+        <div 
+          className="absolute inset-0 opacity-[0.07]" 
+          style={{ 
+            backgroundImage: `
+              linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px' 
+          }} 
+        />
+        {/* The Analog Grain */}
+        <div className="absolute inset-0 opacity-[0.2] mix-blend-overlay pointer-events-none" style={{ filter: 'url(#grainy)' }} />
+      </div>
+
       {/* BACKGROUND DECO */}
       <motion.div style={{ clipPath: clipPathValue }} className="fixed inset-0 z-0 bg-[#080808]">
         <motion.div style={{ y: bgY }} className="absolute inset-0 flex flex-col items-center justify-around opacity-5">
@@ -96,7 +124,7 @@ export default function WOISingularity() {
             WOI is a decentralized ecosystem architecture firm. We design, establish, and scale the ventures that bridge the gaps between innovation, capital, and governance.
         </p>
         <div className="flex flex-col md:flex-row gap-6">
-            <button className="px-10 py-5 bg-white text-black font-black uppercase tracking-widest hover:bg-opacity-90 transition-all">
+            <button className="px-10 py-5 bg-white text-black font-black uppercase tracking-widest hover:invert transition-all duration-300">
                 Explore Our Ventures
             </button>
             <button className="px-10 py-5 border border-white/20 font-black uppercase tracking-widest hover:bg-white/10 transition-all">
@@ -127,7 +155,7 @@ export default function WOISingularity() {
                     { icon: Layout, title: "Venture Structuring", desc: "Building independent entities to solve those bottlenecks.", color: COLORS.VIBRANT_PINK },
                     { icon: Globe, title: "Global Integration", desc: "Aligning private innovation with national interests.", color: COLORS.MANGO_YELLOW }
                 ].map((item, i) => (
-                    <div key={i} className="flex gap-6 items-start p-6 bg-white/5 border border-white/10 hover:border-white/30 transition-colors">
+                    <div key={i} className="flex gap-6 items-start p-6 bg-white/5 border border-white/10 hover:border-white/30 transition-colors backdrop-blur-md">
                         <item.icon style={{ color: item.color }} size={32} strokeWidth={1.5} />
                         <div>
                             <h4 className="font-bold text-xl uppercase mb-2">{item.title}</h4>
@@ -139,7 +167,7 @@ export default function WOISingularity() {
         </div>
       </motion.div>
 
-      {/* 4. THE WOI FRAMEWORK (ARCHITECTURE LAYER) */}
+      {/* 4. THE WOI FRAMEWORK (ARCHITECTURE LAYERS) */}
       <ArchitectureLayer 
         title="Analyze"
         subtitle="Step 01: Identification"
@@ -180,14 +208,14 @@ export default function WOISingularity() {
         range={[0.9, 0.92, 0.94, 0.96]}
       />
 
-      {/* FINAL STATE: SLIDE UP EFFECT */}
+      {/* FINAL STATE: THE INVERTED SLIDE UP */}
       <motion.div 
         style={{ 
             opacity: useTransform(smoothProgress, [0.96, 0.98], [0, 1]),
             y: useTransform(smoothProgress, [0.96, 0.99], ["100%", "0%"]),
             backgroundColor: COLORS.WHITE
         }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-6 text-black"
+        className="fixed inset-0 z-[70] flex items-center justify-center p-6 text-black"
       >
         <div className="max-w-6xl w-full text-center">
             <motion.h2 
@@ -214,7 +242,7 @@ export default function WOISingularity() {
                }}
                className="flex flex-col md:flex-row gap-4 justify-center"
             >
-                <button className="px-12 py-6 bg-black text-white font-black uppercase tracking-widest hover:scale-105 transition-transform">
+                <button className="px-12 py-6 bg-black text-white font-black uppercase tracking-widest hover:scale-105 transition-transform active:scale-95">
                     Get in Touch
                 </button>
                 <button className="px-12 py-6 border-2 border-black font-black uppercase tracking-widest hover:bg-black hover:text-white transition-all">
@@ -225,7 +253,7 @@ export default function WOISingularity() {
       </motion.div>
 
       {/* PROGRESS HUD */}
-      <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-4 z-[60]">
+      <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex items-center gap-4 z-[80]">
          <div className="w-48 h-[2px] bg-white/10 overflow-hidden">
             <motion.div 
                 className="h-full" 
