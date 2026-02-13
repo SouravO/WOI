@@ -34,7 +34,7 @@ export default function DraftingTablePortal() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const { scrollYProgress } = useScroll({ 
+  const { scrollYProgress } = useScroll({
     target: scrollRef,
     offset: ["start start", "end end"]
   });
@@ -64,7 +64,7 @@ export default function DraftingTablePortal() {
 
       {/* STICKY WRAPPER: Fixed on desktop, static on mobile */}
       <div className={`${isMobile ? 'relative' : 'sticky top-0 h-screen overflow-hidden'} w-full border-y border-white/10`}>
-        
+
         {/* GLOBAL TEXTURE */}
         <div className="absolute inset-0 pointer-events-none z-0">
           <div className="absolute inset-0 opacity-[0.05]" style={{ backgroundImage: `linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)`, backgroundSize: '60px 60px' }} />
@@ -80,8 +80,8 @@ export default function DraftingTablePortal() {
           ))}
         </div>
 
-        <motion.div 
-          style={{ x: isMobile ? 0 : springX }} 
+        <motion.div
+          style={{ x: isMobile ? 0 : springX }}
           className={`flex ${isMobile ? 'flex-col' : 'h-full w-[300vw]'} relative z-10`}
         >
           {/* SECTION 01: THE CORE DATA */}
@@ -115,9 +115,9 @@ export default function DraftingTablePortal() {
             <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 relative z-10">
               <div className="space-y-6 md:space-y-8">
                 <div className="text-3xl md:text-4xl font-black italic tracking-tighter" style={{ color: COLORS.VIBRANT_PINK }}>02.</div>
-                <h2 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">Architectural <br /> Request.</h2>
+                <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-[0.9]">Architectural <br /> Request.</h2>
                 <p className="text-base md:text-lg font-light opacity-50 leading-relaxed max-w-md">
-                  Submit your venture architecture for structural analysis. 
+                  Submit your venture architecture for structural analysis.
                   Our team evaluates for systemic gaps and liquidity alignment.
                 </p>
               </div>
@@ -144,7 +144,7 @@ export default function DraftingTablePortal() {
 
           {/* SECTION 03: THE GEOSPATIAL MAP */}
           <section className="w-screen min-h-screen lg:h-full flex items-center justify-center lg:justify-start px-6 md:px-32 relative overflow-hidden py-20 lg:py-0">
-            
+
             {/* MAP BACKGROUND - Responsive scale */}
             <div className="absolute inset-0 z-0">
               <iframe
