@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { ArrowDown, Zap, Target, Shield } from 'lucide-react';
+import { Sparkles, Globe, ArrowUpRight, Zap } from 'lucide-react';
 
-const VisionClean = () => {
+const AsymmetricVision = () => {
   const containerRef = useRef(null);
   
   const { scrollYProgress } = useScroll({
@@ -10,111 +10,124 @@ const VisionClean = () => {
     offset: ["start start", "end end"]
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 25 });
 
-  // Subtle transformations
-  const heroOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
-  const heroScale = useTransform(smoothProgress, [0, 0.2], [1, 0.95]);
-  const lineExtend = useTransform(smoothProgress, [0, 0.5], ["0%", "100%"]);
+  // Parallax Values
+  const leftColumnY = useTransform(smoothProgress, [0, 1], [0, -800]);
+  const rightColumnY = useTransform(smoothProgress, [0, 1], [0, 800]);
+  const centerScale = useTransform(smoothProgress, [0, 0.5], [1, 1.2]);
+  const pinkRotate = useTransform(smoothProgress, [0, 1], [0, 360]);
 
   return (
-    <div ref={containerRef} className="bg-black text-white" style={{ fontFamily: "'Poppins', sans-serif" }}>
+    <div ref={containerRef} className="bg-black text-white selection:bg-[#E75893]" style={{ fontFamily: "'Poppins', sans-serif" }}>
       
-      {/* SECTION 1: THE SILENT NORTH (FOREST GREEN ACCENT) */}
-      <section className="h-screen flex flex-col items-center justify-center relative px-6 overflow-hidden">
-        <motion.div style={{ opacity: heroOpacity, scale: heroScale }} className="z-10 text-center">
-          <motion.div 
-            initial={{ width: 0 }} 
-            animate={{ width: "80px" }} 
-            className="h-1 bg-[#026F43] mx-auto mb-10"
-          />
-          <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-6">
-            The <span className="font-bold">Vision</span>
-          </h1>
-          <p className="text-zinc-500 max-w-lg mx-auto text-lg leading-relaxed">
-            A strategic evolution of design and purpose, built on the pillars of clarity and vibrant execution.
-          </p>
+      {/* SECTION 1: THE SPLIT ASCENSION (LAVENDER & WHITE) */}
+      <section className="relative h-[150vh] overflow-hidden flex items-center justify-center">
+        
+        {/* Left Floating Track */}
+        <motion.div style={{ y: leftColumnY }} className="absolute left-[5%] top-20 w-[20%] space-y-20 opacity-40 hidden md:block">
+          <div className="h-96 bg-[#6B66E1] border border-white/20" />
+          <div className="h-64 bg-zinc-900 border border-white/10" />
+          <div className="h-96 bg-[#026F43] border border-white/20" />
         </motion.div>
 
-        {/* Subtle Background Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#026F43] rounded-full blur-[160px] opacity-20 pointer-events-none" />
-        
-        <motion.div className="absolute bottom-10 animate-bounce opacity-30">
-          <ArrowDown size={30} />
+        {/* Right Floating Track */}
+        <motion.div style={{ y: rightColumnY }} className="absolute right-[5%] top-[-50%] w-[20%] space-y-20 opacity-40 hidden md:block">
+          <div className="h-64 bg-zinc-900 border border-white/10" />
+          <div className="h-96 bg-[#E75893] border border-white/20" />
+          <div className="h-96 bg-[#F6982F] border border-white/20" />
         </motion.div>
+
+        <div className="z-10 text-center max-w-4xl px-6">
+          <motion.div style={{ scale: centerScale }}>
+            <h1 className="text-[12vw] font-black leading-none mb-4">
+              THE <br /> <span className="text-[#6B66E1]">ARCHITECT</span>
+            </h1>
+            <p className="text-xl tracking-[0.5em] uppercase font-light text-zinc-500">Visionary Foundations</p>
+          </motion.div>
+        </div>
       </section>
 
-      {/* SECTION 2: THE PHILOSOPHY (ELECTRIC BLUE & LAVENDER) */}
-      <section className="min-h-screen py-32 px-6 relative">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-          <div>
-            <span className="text-[#2261F3] font-bold tracking-[0.3em] uppercase text-sm">Foundations</span>
-            <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 leading-tight">
-              Built with <br/> 
-              <span className="text-[#6B66E1]">Deep Intent.</span>
-            </h2>
-            <div className="space-y-12">
-              <div className="flex gap-6">
-                <div className="w-12 h-12 shrink-0 bg-[#2261F3]/10 flex items-center justify-center text-[#2261F3]">
-                  <Target size={24} />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold mb-2">Precision Goalsetting</h4>
-                  <p className="text-zinc-400">We don't aim for the middle. We define the edge and move toward it with absolute certainty.</p>
-                </div>
-              </div>
-              <div className="flex gap-6">
-                <div className="w-12 h-12 shrink-0 bg-[#6B66E1]/10 flex items-center justify-center text-[#6B66E1]">
-                  <Shield size={24} />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold mb-2">Integrity of Form</h4>
-                  <p className="text-zinc-400">Every pixel serves a purpose. If it doesn't add value, it doesn't exist in our ecosystem.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Abstract Image Placeholder / Graphic */}
-          <div className="relative aspect-square">
+      {/* SECTION 2: THE OFFSET CONTENT (PINK & FOREST GREEN) */}
+      <section className="min-h-screen py-40 px-6 relative bg-white text-black">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-24 items-start">
+            
+            {/* Column 1: Image/Graphic with Parallax */}
             <motion.div 
-              style={{ scaleY: lineExtend }}
-              className="absolute left-0 top-0 w-[2px] h-full bg-gradient-to-b from-[#2261F3] via-[#6B66E1] to-transparent" 
-            />
-            <div className="w-full h-full bg-zinc-900/50 border border-zinc-800 backdrop-blur-3xl flex items-center justify-center">
-               <Zap size={100} className="text-zinc-800" />
+              initial={{ x: -100, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              className="relative"
+            >
+              <div className="bg-[#E75893] w-full aspect-[3/4] p-12 flex items-center justify-center relative z-10">
+                <motion.div style={{ rotate: pinkRotate }}>
+                   <Sparkles size={180} className="text-white" />
+                </motion.div>
+              </div>
+              <div className="absolute -bottom-10 -right-10 w-full h-full bg-[#026F43] -z-10" />
+            </motion.div>
+
+            {/* Column 2: Text that "overtakes" the scroll */}
+            <div className="pt-20">
+              <span className="text-xs font-black uppercase tracking-widest bg-black text-white px-2 py-1">Philosophy 01</span>
+              <h2 className="text-6xl font-bold mt-6 mb-10 leading-tight">
+                Disrupting the <br /> <span className="italic underline decoration-[#E75893]">Status Quo</span>
+              </h2>
+              <p className="text-2xl leading-relaxed text-zinc-700 mb-8">
+                "We don't look for gaps in the market. We create entirely new landscapes where the market didn't know it could exist."
+              </p>
+              <hr className="border-black mb-8" />
+              <div className="flex justify-between items-center group cursor-pointer">
+                <span className="text-xl font-bold">Read the Manifesto</span>
+                <div className="p-4 bg-black text-white rounded-full group-hover:rotate-45 transition-transform">
+                  <ArrowUpRight size={24} />
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* SECTION 3: THE CALL (BRICK RED & MANGO) */}
-      <section className="h-screen flex items-center justify-center px-6">
-        <div className="w-full max-w-4xl bg-zinc-900/30 border border-zinc-800 p-12 md:p-24 text-center relative overflow-hidden">
-          {/* Accent Corners */}
-          <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#EC3B2E]" />
-          <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#F6982F]" />
-          
-          <h2 className="text-4xl md:text-7xl font-bold mb-10">
-            Let's build the <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#EC3B2E] to-[#F6982F]">Unforgettable.</span>
-          </h2>
+      {/* SECTION 3: THE TERMINAL EXIT (VIBRANT PINK & MANGO) */}
+      <section className="h-screen bg-black flex flex-col items-center justify-center overflow-hidden">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="grid grid-cols-2 md:grid-cols-4 w-full border-t border-b border-zinc-800"
+        >
+          {[
+            { label: "Stability", val: "99%", color: "#026F43" },
+            { label: "Vision", val: "∞", color: "#F6982F" },
+            { label: "Speed", val: "MAX", color: "#E75893" },
+            { label: "Input", val: "LIVE", color: "#2261F3" }
+          ].map((stat, i) => (
+            <div key={i} className="p-10 border-r border-zinc-800 flex flex-col items-center">
+              <span className="text-[10px] uppercase tracking-widest text-zinc-500 mb-2">{stat.label}</span>
+              <span className="text-4xl font-black" style={{ color: stat.color }}>{stat.val}</span>
+            </div>
+          ))}
+        </motion.div>
 
-          <motion.button
-            whileHover={{ y: -5 }}
-            className="bg-white text-black px-12 py-4 font-bold text-lg rounded-full transition-shadow hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+        <div className="mt-24 text-center">
+          <h3 className="text-4xl md:text-6xl font-black mb-12">CHART THE UNKNOWN</h3>
+          <motion.button 
+            whileHover={{ scale: 1.1, letterSpacing: "4px" }}
+            className="px-16 py-6 border-2 border-[#F6982F] text-[#F6982F] font-black uppercase text-xl hover:bg-[#F6982F] hover:text-black transition-all"
           >
-            Contact the Founder
+            Connect with Founder
           </motion.button>
         </div>
+
+        {/* Floating UI Elements */}
+        <div className="absolute top-10 right-10 flex items-center gap-4 text-zinc-500">
+           <Zap size={16} />
+           <span className="text-[10px] font-mono tracking-tighter">SYSTEMS_ACTIVE_2026</span>
+        </div>
       </section>
 
-      {/* Minimal Footer */}
-      <footer className="py-10 border-t border-zinc-900 px-6 text-center">
-        <p className="text-zinc-600 text-sm tracking-widest uppercase">Archive 2026 // Visionary Systems</p>
-      </footer>
     </div>
   );
 };
 
-export default VisionClean;
+export default AsymmetricVision;
