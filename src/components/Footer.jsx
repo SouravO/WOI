@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Globe, Cpu, Command, Shield, 
-  Youtube, Facebook, Instagram, Linkedin,
+import {
+  Globe, Cpu, Command, Shield,
+  Youtube, Facebook, Instagram, Linkedin, X,
   ArrowRight
 } from 'lucide-react';
 
@@ -16,13 +16,21 @@ const Footer = () => {
     { name: 'Security Audit', path: '/audit' },
   ];
 
+  const socialLinks = [
+    { icon: Linkedin, link: 'https://www.linkedin.com' },
+    { icon: Facebook, link: 'https://www.facebook.com/worldofique/' },
+    { icon: Instagram, link: 'https://www.instagram.com/world_of_ique/' },
+    { icon: Youtube, link: 'https://youtube.com/@world_of_ique?si=5-LnnxtHVhUgTIau' },
+    { icon: X, link: 'https://x.com/WorldOfIque' }
+  ];
+
   return (
     <footer className="bg-white text-black font-mono border-t-[12px] border-black">
       <div className="max-w-[1800px] mx-auto">
-        
+
         {/* UPPER TIER: THE HERO GRID */}
         <div className="flex flex-col lg:flex-row border-b-[1px] border-black">
-          
+
           {/* LOGO & MANIFESTO */}
           <div className="lg:w-1/2 p-8 md:p-16 border-b-[1px] lg:border-b-0 lg:border-r-[1px] border-black bg-[#F2F2F2]">
             <h2 className="text-7xl md:text-[10rem] font-black leading-[0.8] tracking-tighter uppercase mb-12">
@@ -60,7 +68,7 @@ const Footer = () => {
         {/* MIDDLE TIER: NAVIGATION TABLE */}
         <div className="grid grid-cols-1 md:grid-cols-4 border-b-[1px] border-black">
           {navLinks.map((link, i) => (
-            <button 
+            <button
               key={i}
               onClick={() => navigate(link.path)}
               className="p-6 text-left text-xs font-bold uppercase border-r-[1px] border-black last:border-r-0 hover:bg-black hover:text-white transition-colors"
@@ -72,11 +80,17 @@ const Footer = () => {
 
         {/* BOTTOM TIER: DATA & SOCIALS */}
         <div className="flex flex-col md:flex-row justify-between items-center p-8 gap-12">
-          
+
           <div className="flex items-center gap-12">
             <div className="flex gap-4">
-              {[Linkedin, Facebook, Instagram, Youtube].map((Icon, idx) => (
-                <a key={idx} href="#" className="p-3 border-2 border-black hover:bg-black hover:text-white transition-all">
+              {socialLinks.map(({ icon: Icon, link }, idx) => (
+                <a
+                  key={idx}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-3 border-2 border-black hover:bg-black hover:text-white transition-all"
+                >
                   <Icon size={20} strokeWidth={3} />
                 </a>
               ))}
