@@ -13,92 +13,93 @@ const COLORS = {
   WHITE: "#FFFFFF"
 };
 
-// --- UPDATED ARCHITECTURE LAYER COMPONENT ---
+// --- MONOLITHIC TERMINAL ARCHITECTURE LAYER ---
 const ArchitectureLayer = ({ title, subtitle, content, icon: Icon, progress, range, color }) => {
   const opacity = useTransform(progress, range, [0, 1, 1, 0]);
-  const x = useTransform(progress, range, [100, 0, 0, -100]);
-  const lineScaleY = useTransform(progress, range, [0, 1, 1, 0]);
-  const textBlur = useTransform(progress, range, ["blur(10px)", "blur(0px)", "blur(0px)", "blur(10px)"]);
+  
+  // Wipe effect using clip-path
+  const clipPath = useTransform(progress, range, [
+    "inset(100% 0% 0% 0%)",
+    "inset(0% 0% 0% 0%)",
+    "inset(0% 0% 0% 0%)",
+    "inset(0% 0% 100% 0%)"
+  ]);
+  
+  const textY = useTransform(progress, range, [60, 0, 0, -60]);
 
   return (
     <motion.div 
-      style={{ opacity }}
-      className="fixed inset-0 flex items-center justify-center p-6 md:p-20 pointer-events-none"
+      style={{ opacity, clipPath }}
+      className="fixed inset-0 flex items-center justify-center bg-[#050505] z-20 overflow-hidden"
     >
-      <div className="max-w-7xl w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center pointer-events-auto">
-        
-        {/* Decorative Side Label */}
-        <div className="hidden md:block col-span-1">
-            <motion.div 
-                style={{ color, opacity: 0.2 }}
-                className="text-7xl font-black uppercase tracking-tighter origin-left -rotate-90 whitespace-nowrap translate-x-4"
-            >
-                {title}
-            </motion.div>
-        </div>
+      {/* Dynamic Background Grid */}
+      <div 
+        className="absolute inset-0 opacity-[0.07] pointer-events-none" 
+        style={{ 
+          backgroundImage: `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px)`, 
+          backgroundSize: '50px 50px' 
+        }} 
+      />
 
-        {/* Main Content Card */}
-        <motion.div 
-            style={{ x, filter: textBlur }}
-            className="col-span-12 md:col-span-8 bg-white/5 backdrop-blur-2xl border border-white/10 p-10 md:p-20 relative overflow-hidden group"
-        >
-            {/* The "Scanning" Line UI */}
+      <div className="max-w-[90vw] w-full grid grid-cols-1 lg:grid-cols-2 border border-white/10 bg-black/40 backdrop-blur-xl relative">
+        
+        {/* Visual Terminal Side */}
+        <div className="relative h-64 lg:h-[600px] border-b lg:border-b-0 lg:border-r border-white/10 flex items-center justify-center overflow-hidden bg-black/20">
+            {/* Rotating Technical Ring */}
             <motion.div 
-                style={{ scaleY: lineScaleY, backgroundColor: color }}
-                className="absolute left-0 top-0 w-1.5 h-full origin-top"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                className="absolute w-[120%] h-[120%] opacity-20"
+                style={{ border: `1px dashed ${color}`, borderRadius: '100%' }}
+            />
+            <motion.div 
+                animate={{ rotate: -360 }}
+                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                className="absolute w-[80%] h-[80%] opacity-10"
+                style={{ border: `1px solid ${color}`, borderRadius: '100%' }}
             />
             
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-[1px]" style={{ backgroundColor: color }} />
-                        <span className="font-mono text-[10px] tracking-[0.4em] uppercase" style={{ color }}>
-                            {subtitle}
-                        </span>
-                    </div>
-                    <h3 className="text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none">
-                        {title}<span style={{ color }}>.</span>
-                    </h3>
+            <div className="relative z-10 flex flex-col items-center">
+                <div className="p-10 mb-6 bg-black border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]" style={{ color }}>
+                    <Icon size={80} strokeWidth={1} />
                 </div>
-                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 self-start md:self-auto" style={{ color }}>
-                    <Icon size={48} strokeWidth={1} />
-                </div>
+                <div className="font-mono text-[10px] tracking-[0.6em] uppercase opacity-40">System_Protocol_{title}</div>
             </div>
-
-            <p className="text-2xl md:text-4xl font-light leading-tight text-white/80 max-w-3xl">
-                {content}
-            </p>
-
-            {/* Technical Footer Decoration */}
-            <div className="mt-16 pt-8 border-t border-white/5 flex justify-between items-center font-mono text-[9px] uppercase tracking-widest opacity-30">
-                <span>Ref_ID: {title}_STRAT_01</span>
-                <span>Coord: 51.5074° N, 0.1278° W</span>
-                <span className="hidden md:inline">Status: System_Optimized</span>
-            </div>
-        </motion.div>
-
-        {/* Right Side Info Metrics */}
-        <div className="hidden md:flex col-span-3 flex-col gap-10 pl-10">
-            {[
-                { label: "Structural Integrity", val: "98%" },
-                { label: "Ecosystem Alignment", val: "100%" },
-                { label: "Deployment Velocity", val: "A+" }
-            ].map((metric, i) => (
-                <div key={i} className="space-y-2">
-                    <div className="text-[10px] font-mono opacity-40 uppercase tracking-tighter">{metric.label}</div>
-                    <div className="flex items-center gap-4">
-                        <div className="h-1 flex-grow bg-white/10 overflow-hidden">
-                            <motion.div 
-                                className="h-full" 
-                                style={{ backgroundColor: color, width: i === 0 ? "98%" : i === 1 ? "100%" : "85%" }} 
-                            />
-                        </div>
-                        <span className="font-mono text-xs" style={{ color }}>{metric.val}</span>
-                    </div>
-                </div>
-            ))}
         </div>
 
+        {/* Content Terminal Side */}
+        <div className="p-10 lg:p-20 flex flex-col justify-center relative">
+            {/* Aesthetic Corner Accents */}
+            <div className="absolute top-0 right-0 p-4 opacity-20 font-mono text-[8px]" style={{ color }}>
+                CORE_ENGINE_v4.0
+            </div>
+
+            <motion.div style={{ y: textY }} className="space-y-8">
+                <div className="inline-flex items-center gap-4">
+                    <div className="w-12 h-[1px] bg-white/20" />
+                    <span className="font-mono text-xs uppercase tracking-widest" style={{ color }}>
+                        {subtitle}
+                    </span>
+                </div>
+                
+                <h2 className="text-6xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.8]">
+                    {title}<span className="animate-pulse" style={{ color }}>_</span>
+                </h2>
+
+                <p className="text-xl lg:text-3xl font-light text-white/70 leading-tight max-w-xl">
+                    {content}
+                </p>
+
+                <div className="pt-10 flex gap-6">
+                    <div className="w-1 h-16" style={{ backgroundColor: color }} />
+                    <div className="font-mono text-[10px] opacity-40 uppercase leading-loose tracking-widest">
+                        Process: [Executing]<br/>
+                        Security: [Verified]<br/>
+                        Scale: [Global_Ecosystem]
+                    </div>
+                </div>
+            </motion.div>
+        </div>
       </div>
     </motion.div>
   );
@@ -200,7 +201,7 @@ export default function WOISingularity() {
         </div>
       </motion.div>
 
-      {/* 4. THE WOI FRAMEWORK (ARCHITECTURE LAYERS) */}
+      {/* 4. THE WOI FRAMEWORK (MONOLITHIC TERMINAL LAYERS) */}
       <ArchitectureLayer 
         title="Analyze"
         subtitle="Step 01: Identification"
