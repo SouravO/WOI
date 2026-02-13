@@ -193,12 +193,12 @@ export default function WOISingularity() {
         <div className="flex flex-col items-center mb-6 lg:mb-8 text-white drop-shadow-lg">
           <StaggeredText
             text="BUILDING"
-            className="text-4xl md:text-6xl lg:text-[10vw] font-black uppercase leading-[0.9] tracking-tighter"
+            className="text-7xl md:text-6xl lg:text-[10vw] font-black uppercase leading-[0.9] tracking-tighter"
             delay={0.2}
           />
           <StaggeredText
             text="NATIONS"
-            className="text-4xl md:text-6xl lg:text-[9vw] font-black uppercase leading-[0.9] tracking-tighter "
+            className="text-7xl md:text-6xl lg:text-[9vw] font-black uppercase leading-[0.9] tracking-tighter "
             delay={0.8}
           />
         </div>
