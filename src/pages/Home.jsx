@@ -193,12 +193,12 @@ export default function WOISingularity() {
         <div className="flex flex-col items-center mb-6 lg:mb-8 text-white drop-shadow-lg">
           <StaggeredText
             text="BUILDING"
-            className="text-4xl md:text-6xl lg:text-[7vw] font-black uppercase leading-[0.9] tracking-tighter"
+            className="text-4xl md:text-6xl lg:text-[10vw] font-black uppercase leading-[0.9] tracking-tighter"
             delay={0.2}
           />
           <StaggeredText
             text="NATIONS"
-            className="text-4xl md:text-6xl lg:text-[7vw] font-black uppercase leading-[0.9] tracking-tighter "
+            className="text-4xl md:text-6xl lg:text-[9vw] font-black uppercase leading-[0.9] tracking-tighter "
             delay={0.8}
           />
         </div>
@@ -211,19 +211,7 @@ export default function WOISingularity() {
           WOI is a decentralized ecosystem architecture firm. We design, establish, and scale the ventures that bridge the gaps between innovation, capital, and governance.
         </motion.p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.0 }}
-          className="flex flex-col sm:flex-row gap-4 lg:gap-6 w-full sm:w-auto"
-        >
-          <button className="px-8 lg:px-10 py-4 lg:py-5 bg-white text-black font-black uppercase text-xs lg:text-sm tracking-widest hover:bg-opacity-90 transition-all hover:scale-105 active:scale-95">
-            Explore Our Ventures
-          </button>
-          <button className="px-8 lg:px-10 py-4 lg:py-5 border border-white/20 font-black uppercase text-xs lg:text-sm tracking-widest hover:bg-white/10 transition-all hover:scale-105 active:scale-95">
-            Partner with Us
-          </button>
-        </motion.div>
+       
 
       </motion.div>
 
