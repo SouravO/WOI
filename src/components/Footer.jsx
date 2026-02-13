@@ -1,149 +1,100 @@
-import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Globe, 
-  Sparkles, 
-  Command, 
-  Ghost, 
-  Youtube, 
-  Facebook, 
-  Instagram, 
-  Linkedin 
+  Globe, Cpu, Command, Shield, 
+  Youtube, Facebook, Instagram, Linkedin,
+  ArrowRight
 } from 'lucide-react';
 
 const Footer = () => {
   const navigate = useNavigate();
-  const constraintsRef = useRef(null);
 
-  const socialLinks = [
-    { icon: Linkedin, url: 'https://www.linkedin.com/company/mystartup-school' },
-    { icon: Facebook, url: 'https://www.facebook.com/mystartupschool' },
-    { icon: Instagram, url: 'https://www.instagram.com/mystartup_school/' },
-    { icon: Youtube, url: 'https://www.youtube.com/@mystartupschool' },
+  const navLinks = [
+    { name: 'Terms of Service', path: '/terms' },
+    { name: 'Privacy Protocol', path: '/privacy' },
+    { name: 'System FAQ', path: '/faq' },
+    { name: 'Security Audit', path: '/audit' },
   ];
 
-  return ( 
-    <footer className="relative bg-[#ef6925] text-black min-h-[90vh] flex flex-col justify-center items-center overflow-hidden py-20 pb-32 font-sans">
-      
-      {/* 1. INDUSTRIAL BACKGROUND EFFECTS */}
-      <div className="absolute inset-0 z-0">
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.1] brightness-100 pointer-events-none" />
-      </div>
-
-      {/* 2. THE FLOATING PHYSICS ZONE */}
-      <div ref={constraintsRef} className="absolute inset-0 z-10 overflow-hidden">
-        {[
-          { Icon: Globe, top: '20%', left: '15%', color: '#000' },
-          { Icon: Sparkles, top: '60%', left: '10%', color: '#000' },
-          { Icon: Command, top: '15%', left: '80%', color: '#000' },
-          { Icon: Ghost, top: '70%', left: '85%', color: '#000' },
-        ].map((item, i) => (
-          <motion.div
-            key={i}
-            drag
-            dragConstraints={constraintsRef}
-            dragElastic={0.2}
-            whileDrag={{ scale: 1.2, cursor: 'grabbing' }}
-            initial={{ y: 0 }}
-            animate={{ 
-              y: [0, -20, 0],
-              rotate: [0, 5, -5, 0]
-            }}
-            transition={{ 
-              duration: 4 + i, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-            style={{ top: item.top, left: item.left }}
-            className="absolute p-6 bg-white border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] cursor-grab z-20 hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] transition-shadow"
-          >
-            <item.Icon size={32} style={{ color: item.color }} strokeWidth={2} />
-          </motion.div>
-        ))}
-      </div>
-
-      {/* 3. THE CENTRAL CONTENT */}
-      <div className="relative z-30 text-center space-y-10 px-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          className="space-y-4"
-        >
-          <div className="flex justify-center gap-2 mb-6">
-            <span className="px-4 py-1 bg-black text-white border-2 border-transparent text-[10px] font-mono tracking-widest uppercase font-bold shadow-[4px_4px_0px_rgba(255,255,255,0.4)]">
-              Final Destination
-            </span>
-          </div>
-          <h2 className="text-7xl md:text-[10rem] font-black tracking-[-0.05em] leading-[0.8] uppercase drop-shadow-[4px_4px_0px_rgba(255,255,255,0.4)]">
-            Beyond<br/>
-            <span className="text-white drop-shadow-[5px_5px_0px_rgba(0,0,0,1)] italic font-serif lowercase px-4">the</span>
-            Horizon
-          </h2>
-        </motion.div>
-
-        <motion.button
-          whileHover={{ scale: 1.05, letterSpacing: '0.2em' }}
-          className="px-12 py-5 bg-black text-white border-2 border-black hover:bg-white hover:text-black hover:border-black font-black text-sm tracking-widest uppercase transition-all shadow-[6px_6px_0px_rgba(255,255,255,0.4)]"
-        >
-          Initiate Contact
-        </motion.button>
-      </div>
-
-      {/* 4. THE INDUSTRIAL GRID BAR */}
-      {/* FIXED: Added pointer-events-none to the container so it doesn't 
-          block the FAQ button below it.
-      */}
-      <div className="absolute bottom-32 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-40 px-4 pointer-events-none">
-        {/* FIXED: Added pointer-events-auto so social links and 
-            buttons inside the bar remain clickable.
-        */}
-        <div className="p-8 bg-white border-4 border-black border-double shadow-[8px_8px_0px_rgba(0,0,0,1)] flex flex-col md:flex-row justify-between items-center gap-10 pointer-events-auto">
+  return (
+    <footer className="bg-white text-black font-mono border-t-[12px] border-black">
+      <div className="max-w-[1800px] mx-auto">
+        
+        {/* UPPER TIER: THE HERO GRID */}
+        <div className="flex flex-col lg:flex-row border-b-[1px] border-black">
           
-          <div className="flex items-center gap-8">
-            <div className="text-left">
-              <p className="text-[10px] font-mono text-black/50 uppercase tracking-[0.3em] font-bold">JOIN</p>
-              <p className="text-sm font-black text-black uppercase">Startup School</p>
+          {/* LOGO & MANIFESTO */}
+          <div className="lg:w-1/2 p-8 md:p-16 border-b-[1px] lg:border-b-0 lg:border-r-[1px] border-black bg-[#F2F2F2]">
+            <h2 className="text-7xl md:text-[10rem] font-black leading-[0.8] tracking-tighter uppercase mb-12">
+              iQue<span className="text-[#026F43]">.</span>
+            </h2>
+            <div className="flex flex-col md:flex-row gap-8 items-start justify-between">
+              <p className="text-sm font-bold leading-tight max-w-[300px] uppercase">
+                World of iQue: Decentralized holdings and architectural infrastructure. Established 2026.
+              </p>
+              <button className="bg-black text-white px-8 py-4 text-xs font-black uppercase tracking-[0.2em] flex items-center gap-4 hover:invert transition-all">
+                Initiate <ArrowRight size={16} />
+              </button>
             </div>
-            <div className="h-8 w-1 bg-black" />
           </div>
 
-          {/* SOCIAL MEDIA ICONS WITH LINKS */}
-          <div className="flex gap-4">
-            {socialLinks.map((social, index) => (
-              <motion.a
-                key={index}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ rotate: 180 }}
-                className="p-3 bg-black text-white border-2 border-black rounded-none cursor-pointer transition-colors hover:bg-white hover:text-black shadow-[4px_4px_0px_rgba(0,0,0,0.2)]"
-              >
-                <social.icon size={18} />
-              </motion.a>
+          {/* SYSTEM CATEGORIES (STATIC BLOCKS) */}
+          <div className="lg:w-1/2 grid grid-cols-2">
+            {[
+              { label: 'Network', icon: Globe, code: 'GLB-01' },
+              { label: 'Compute', icon: Cpu, code: 'CPU-04' },
+              { label: 'Command', icon: Command, code: 'CMD-09' },
+              { label: 'Security', icon: Shield, code: 'SHL-07' }
+            ].map((item, i) => (
+              <div key={i} className="p-10 border-r-[1px] border-b-[1px] border-black last:border-r-0 flex flex-col justify-between aspect-square lg:aspect-auto">
+                <item.icon size={32} strokeWidth={2.5} />
+                <div>
+                  <span className="block text-[10px] opacity-40 mb-1">{item.code}</span>
+                  <span className="block text-xl font-black uppercase leading-none">{item.label}</span>
+                </div>
+              </div>
             ))}
           </div>
+        </div>
+
+        {/* MIDDLE TIER: NAVIGATION TABLE */}
+        <div className="grid grid-cols-1 md:grid-cols-4 border-b-[1px] border-black">
+          {navLinks.map((link, i) => (
+            <button 
+              key={i}
+              onClick={() => navigate(link.path)}
+              className="p-6 text-left text-xs font-bold uppercase border-r-[1px] border-black last:border-r-0 hover:bg-black hover:text-white transition-colors"
+            >
+              [ {link.name} ]
+            </button>
+          ))}
+        </div>
+
+        {/* BOTTOM TIER: DATA & SOCIALS */}
+        <div className="flex flex-col md:flex-row justify-between items-center p-8 gap-12">
           
-          <div className="text-left flex items-center gap-4">
-             <div className="h-8 w-1 bg-black" />
-             <div>
-              <p className="text-[10px] font-mono text-black/50 uppercase tracking-[0.3em] font-bold">NOT AN </p>
-              <p className="text-lg font-black text-[#ef6925]">MBA</p>
-             </div>
+          <div className="flex items-center gap-12">
+            <div className="flex gap-4">
+              {[Linkedin, Facebook, Instagram, Youtube].map((Icon, idx) => (
+                <a key={idx} href="#" className="p-3 border-2 border-black hover:bg-black hover:text-white transition-all">
+                  <Icon size={20} strokeWidth={3} />
+                </a>
+              ))}
+            </div>
+            <div className="hidden xl:block">
+              <p className="text-[10px] font-black uppercase leading-none">Status: Operational</p>
+              <p className="text-[10px] uppercase opacity-40">Identity: Verified_Root</p>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <div className="text-[4rem] md:text-[6rem] font-black leading-[0.7] opacity-5 tracking-tighter uppercase pointer-events-none select-none">
+              DH_2026
+            </div>
+            <p className="text-[10px] font-bold uppercase mt-2">© All Rights Reserved — World of iQue</p>
           </div>
         </div>
-      </div>
 
-      {/* 5. SUBTLE BOTTOM BAR (FAQ is now clickable) */}
-      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 flex gap-10 text-[9px] font-mono text-black/40 uppercase tracking-[0.5em] font-bold z-50">
-        <span>©2026</span>
-        <span>startupschool</span>
-        <button
-          onClick={() => navigate('/faq')}
-          className="hover:text-white transition-colors underline decoration-dotted hover:decoration-solid cursor-pointer pointer-events-auto"
-        >
-          FAQ
-        </button>
       </div>
     </footer>
   );

@@ -1,186 +1,120 @@
-import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { ArrowDown, Zap, Target, Shield } from 'lucide-react';
 
-const IMAGES = [
-  { url: '/assets/img12.jpeg', title: 'VISION' },
-  { url: '/assets/img9.jpeg', title: 'CLARITY' },
-  { url: '/assets/img4.jpeg', title: 'Strategy' },
-  { url: '/assets/img8.jpeg', title: 'Focus' },
-];
-
-export default function PerspectiveGallery() {
-  const navigate = useNavigate();
-  const [captures, setCaptures] = useState([]);
-  const [flash, setFlash] = useState(false);
-
- const handleCapture = (e) => {
-  // 1. Prevent capture when clicking buttons
-  if (e.target.closest('button')) return;
-
-  // 2. Check if it's a mobile device (width < 768px)
-  const isMobile = window.innerWidth < 768;
-  if (isMobile) return; // Exit early so no flash or polaroid happens
-
-  // 3. If not mobile, proceed with Flash and Polaroid logic
-  setFlash(true);
-  setTimeout(() => setFlash(false), 150);
-
-  const x = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-  const y = e.clientY || (e.touches ? e.touches[0].clientY : 0);
-
-  const randomImg = IMAGES[Math.floor(Math.random() * IMAGES.length)];
+const VisionClean = () => {
+  const containerRef = useRef(null);
   
-  const newPhoto = {
-    id: Date.now(),
-    x,
-    y,
-    url: randomImg.url,
-    rotate: Math.random() * 20 - 10,
-  };
-
-  setCaptures((prev) => [...prev, newPhoto].slice(-5));
-};
-
-  return (
-    <main className="bg-red-600 text-yellow-400 overflow-x-hidden relative selection:bg-yellow-400 selection:text-red-600">
-      {/* Visual Grain Overlay */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.04] z-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-
-      {/* Flash Overlay */}
-      <AnimatePresence>
-        {flash && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-white z-[100] pointer-events-none"
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Hero Section */}
-      <section 
-        onMouseDown={handleCapture}
-        onTouchStart={handleCapture}
-        className="h-[100dvh] flex flex-col items-start justify-center md:justify-end p-6 md:p-10 border-b border-yellow-400/30 relative overflow-hidden cursor-crosshair"
-      >
-        {/* Mobile Header */}
-        <div className="absolute top-12 left-6 right-6 flex justify-between items-start md:hidden z-20">
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-mono leading-none tracking-[0.2em] uppercase text-yellow-300">System // Online</span>
-            <span className="text-[10px] font-mono leading-none tracking-[0.2em] opacity-40 uppercase">Lat: 12.9716° N</span>
-          </div>
-          <div className="text-[10px] font-mono border border-yellow-400/40 px-2 py-1 rounded italic">
-            REC ●
-          </div>
-        </div>
-
-        {/* Captured Polaroids Layer - HIDDEN ON MOBILE (hidden md:block) */}
-        <AnimatePresence>
-          {captures.map((photo) => (
-            <motion.div
-              key={photo.id}
-              initial={{ scale: 1.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="hidden md:block absolute w-28 h-36 md:w-40 md:h-52 bg-white p-1.5 md:p-2 shadow-2xl z-10 pointer-events-none"
-              style={{ 
-                left: 0, 
-                top: 0, 
-                rotate: photo.rotate,
-                x: photo.x - 56, 
-                y: photo.y - 72 
-              }}
-            >
-              <img src={photo.url} className="w-full h-24 md:h-36 object-cover bg-gray-200" alt="captured" />
-              <div className="mt-2 flex flex-col font-mono text-[7px] md:text-[9px] text-black leading-tight">
-                <span className="font-bold uppercase">IMG_{photo.id.toString().slice(-4)}</span>
-                <span className="opacity-50">BENGALURU, IN</span>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {/* Responsive Heading */}
-        <div className="z-20 w-full">
-          <h1 className="text-[26vw] md:text-[22vw] font-black uppercase leading-[0.75] mb-4 md:mb-8 select-none italic">
-            The <br /> <span className="text-outline">Vault</span>
-          </h1>
-          
-          <div className="flex flex-col md:flex-row justify-between w-full font-mono text-[10px] md:text-sm uppercase tracking-[0.2em] md:tracking-[0.3em] text-yellow-300 gap-2">
-            <span>Bengaluru // Perspective</span>
-            <span className="opacity-70 md:block hidden">Click to snap / Scroll to explore</span>
-            {/* Updated Mobile Text */}
-            <span className="opacity-70 md:hidden block animate-pulse">Scroll to explore</span>
-          </div>
-        </div>
-
-        {/* Scroll Indicator for Mobile */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 md:hidden flex flex-col items-center gap-2 opacity-40">
-          <div className="w-[1px] h-12 bg-yellow-400" />
-          <span className="font-mono text-[8px] tracking-[0.3em]">SCROLL</span>
-        </div>
-      </section>
-
-      {/* Perspective Gallery Content */}
-      <section className="py-12 md:py-24">
-        {IMAGES.map((img, i) => (
-          <PerspectiveCard key={i} {...img} />
-        ))}
-      </section>
-
-      {/* Responsive Footer */}
-      <footer className="h-[50vh] md:h-[70vh] flex flex-col items-center justify-center gap-6 px-6">
-        <h2 className="text-xs md:text-xl font-mono uppercase tracking-[0.5em] opacity-40 italic">Next Chapter</h2>
-        <button 
-          className="text-4xl md:text-7xl font-black uppercase italic hover:scale-105 active:scale-95 transition-transform"
-          onClick={() => navigate("/gallery")}
-        >
-          View More →
-        </button>
-      </footer>
-
-      <style jsx>{`
-        .text-outline {
-          -webkit-text-stroke: 1.5px #facc15;
-          color: transparent;
-        }
-        @media (min-width: 768px) {
-          .text-outline { -webkit-text-stroke: 2px #facc15; }
-        }
-        @media (min-width: 1024px) {
-          .text-outline { -webkit-text-stroke: 4px #facc15; }
-        }
-      `}</style>
-    </main>
-  );
-}
-
-function PerspectiveCard({ url, title }) {
-  const container = useRef(null);
   const { scrollYProgress } = useScroll({
-    target: container,
-    offset: ["start end", "end start"]
+    target: containerRef,
+    offset: ["start start", "end end"]
   });
 
-  const scale = useTransform(scrollYProgress, [0, 0.5], [0.9, 1]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.5], [15, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.75, 1], [0, 1, 1, 0]);
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+  // Subtle transformations
+  const heroOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+  const heroScale = useTransform(smoothProgress, [0, 0.2], [1, 0.95]);
+  const lineExtend = useTransform(smoothProgress, [0, 0.5], ["0%", "100%"]);
 
   return (
-    <div ref={container} className="h-[75vh] md:h-[100vh] flex items-center justify-center px-4 md:px-8" style={{ perspective: '1200px' }}>
-      <motion.div 
-        style={{ scale, rotateX, opacity }}
-        className="relative w-full max-w-6xl h-[400px] md:h-[600px] rounded-sm overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] bg-red-800"
-      >
-        <img src={url} alt={title} className="w-full h-full object-cover grayscale-[10%] contrast-110" />
-        <div className="absolute inset-0 bg-gradient-to-t from-red-950/80 via-transparent to-transparent flex items-end p-6 md:p-20">
-          <h2 className="text-[16vw] md:text-[12vw] font-black text-yellow-400 italic tracking-tighter leading-[0.7]">
-            {title}
-          </h2>
+    <div ref={containerRef} className="bg-black text-white" style={{ fontFamily: "'Poppins', sans-serif" }}>
+      
+      {/* SECTION 1: THE SILENT NORTH (FOREST GREEN ACCENT) */}
+      <section className="h-screen flex flex-col items-center justify-center relative px-6 overflow-hidden">
+        <motion.div style={{ opacity: heroOpacity, scale: heroScale }} className="z-10 text-center">
+          <motion.div 
+            initial={{ width: 0 }} 
+            animate={{ width: "80px" }} 
+            className="h-1 bg-[#026F43] mx-auto mb-10"
+          />
+          <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-6">
+            The <span className="font-bold">Vision</span>
+          </h1>
+          <p className="text-zinc-500 max-w-lg mx-auto text-lg leading-relaxed">
+            A strategic evolution of design and purpose, built on the pillars of clarity and vibrant execution.
+          </p>
+        </motion.div>
+
+        {/* Subtle Background Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#026F43] rounded-full blur-[160px] opacity-20 pointer-events-none" />
+        
+        <motion.div className="absolute bottom-10 animate-bounce opacity-30">
+          <ArrowDown size={30} />
+        </motion.div>
+      </section>
+
+      {/* SECTION 2: THE PHILOSOPHY (ELECTRIC BLUE & LAVENDER) */}
+      <section className="min-h-screen py-32 px-6 relative">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-20 items-center">
+          <div>
+            <span className="text-[#2261F3] font-bold tracking-[0.3em] uppercase text-sm">Foundations</span>
+            <h2 className="text-4xl md:text-6xl font-bold mt-4 mb-8 leading-tight">
+              Built with <br/> 
+              <span className="text-[#6B66E1]">Deep Intent.</span>
+            </h2>
+            <div className="space-y-12">
+              <div className="flex gap-6">
+                <div className="w-12 h-12 shrink-0 bg-[#2261F3]/10 flex items-center justify-center text-[#2261F3]">
+                  <Target size={24} />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-2">Precision Goalsetting</h4>
+                  <p className="text-zinc-400">We don't aim for the middle. We define the edge and move toward it with absolute certainty.</p>
+                </div>
+              </div>
+              <div className="flex gap-6">
+                <div className="w-12 h-12 shrink-0 bg-[#6B66E1]/10 flex items-center justify-center text-[#6B66E1]">
+                  <Shield size={24} />
+                </div>
+                <div>
+                  <h4 className="text-xl font-bold mb-2">Integrity of Form</h4>
+                  <p className="text-zinc-400">Every pixel serves a purpose. If it doesn't add value, it doesn't exist in our ecosystem.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Abstract Image Placeholder / Graphic */}
+          <div className="relative aspect-square">
+            <motion.div 
+              style={{ scaleY: lineExtend }}
+              className="absolute left-0 top-0 w-[2px] h-full bg-gradient-to-b from-[#2261F3] via-[#6B66E1] to-transparent" 
+            />
+            <div className="w-full h-full bg-zinc-900/50 border border-zinc-800 backdrop-blur-3xl flex items-center justify-center">
+               <Zap size={100} className="text-zinc-800" />
+            </div>
+          </div>
         </div>
-      </motion.div>
+      </section>
+
+      {/* SECTION 3: THE CALL (BRICK RED & MANGO) */}
+      <section className="h-screen flex items-center justify-center px-6">
+        <div className="w-full max-w-4xl bg-zinc-900/30 border border-zinc-800 p-12 md:p-24 text-center relative overflow-hidden">
+          {/* Accent Corners */}
+          <div className="absolute top-0 left-0 w-20 h-20 border-t-2 border-l-2 border-[#EC3B2E]" />
+          <div className="absolute bottom-0 right-0 w-20 h-20 border-b-2 border-r-2 border-[#F6982F]" />
+          
+          <h2 className="text-4xl md:text-7xl font-bold mb-10">
+            Let's build the <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#EC3B2E] to-[#F6982F]">Unforgettable.</span>
+          </h2>
+
+          <motion.button
+            whileHover={{ y: -5 }}
+            className="bg-white text-black px-12 py-4 font-bold text-lg rounded-full transition-shadow hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]"
+          >
+            Contact the Founder
+          </motion.button>
+        </div>
+      </section>
+
+      {/* Minimal Footer */}
+      <footer className="py-10 border-t border-zinc-900 px-6 text-center">
+        <p className="text-zinc-600 text-sm tracking-widest uppercase">Archive 2026 // Visionary Systems</p>
+      </footer>
     </div>
   );
-}
+};
+
+export default VisionClean;
