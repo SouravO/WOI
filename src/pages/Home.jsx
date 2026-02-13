@@ -93,6 +93,40 @@ const ArchitectureLayer = ({ title, subtitle, content, icon: Icon, progress, ran
       </div>
     </motion.div>
   );
+
+};
+
+const StaggeredText = ({ text, className, delay = 0 }) => {
+  return (
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      className={`flex flex-wrap justify-center overflow-hidden ${className}`}
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: { staggerChildren: 0.08, delayChildren: delay }
+        }
+      }}
+    >
+      {text.split("").map((letter, index) => (
+        <motion.span
+          key={index}
+          variants={{
+            hidden: { y: 100, opacity: 0 },
+            visible: {
+              y: 0,
+              opacity: 1,
+              transition: { type: "spring", damping: 12, stiffness: 200 }
+            }
+          }}
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
 };
 
 export default function WOISingularity() {
@@ -147,7 +181,7 @@ export default function WOISingularity() {
           <iframe
             width="100%"
             height="100%"
-            src="https://www.youtube.com/embed/9HaU8NjH7bI?autoplay=1&mute=1&controls=0&loop=1&playlist=9HaU8NjH7bI&showinfo=0&rel=0&iv_load_policy=3&disablekb=1"
+            src="https://www.youtube.com/embed/Hgg7M3kSqyE?autoplay=1&mute=1&controls=0&loop=1&playlist=Hgg7M3kSqyE&showinfo=0&rel=0&iv_load_policy=3&disablekb=1"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -156,20 +190,41 @@ export default function WOISingularity() {
           ></iframe>
         </div>
 
-        <h1 className="text-4xl md:text-6xl lg:text-[7vw] font-black uppercase leading-[0.9] tracking-tighter mb-6 lg:mb-8 text-white drop-shadow-lg">
-          BUILDING  <br className="hidden md:block" /> NATIONS <span style={{ color: COLORS.FOREST_GREEN }}></span>
-        </h1>
-        <p className="text-base md:text-xl lg:text-2xl font-light opacity-60 max-w-3xl mx-auto leading-relaxed mb-8 lg:mb-12">
+        <div className="flex flex-col items-center mb-6 lg:mb-8 text-white drop-shadow-lg">
+          <StaggeredText
+            text="BUILDING"
+            className="text-4xl md:text-6xl lg:text-[7vw] font-black uppercase leading-[0.9] tracking-tighter"
+            delay={0.2}
+          />
+          <StaggeredText
+            text="NATIONS"
+            className="text-4xl md:text-6xl lg:text-[7vw] font-black uppercase leading-[0.9] tracking-tighter "
+            delay={0.8}
+          />
+        </div>
+        <motion.p
+          initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1.2, ease: 'easeOut', delay: 1.5 }}
+          className="text-base md:text-xl lg:text-2xl font-light opacity-60 max-w-3xl mx-auto leading-relaxed mb-8 lg:mb-12"
+        >
           WOI is a decentralized ecosystem architecture firm. We design, establish, and scale the ventures that bridge the gaps between innovation, capital, and governance.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 lg:gap-6 w-full sm:w-auto">
-          <button className="px-8 lg:px-10 py-4 lg:py-5 bg-white text-black font-black uppercase text-xs lg:text-sm tracking-widest hover:bg-opacity-90 transition-all">
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 2.0 }}
+          className="flex flex-col sm:flex-row gap-4 lg:gap-6 w-full sm:w-auto"
+        >
+          <button className="px-8 lg:px-10 py-4 lg:py-5 bg-white text-black font-black uppercase text-xs lg:text-sm tracking-widest hover:bg-opacity-90 transition-all hover:scale-105 active:scale-95">
             Explore Our Ventures
           </button>
-          <button className="px-8 lg:px-10 py-4 lg:py-5 border border-white/20 font-black uppercase text-xs lg:text-sm tracking-widest hover:bg-white/10 transition-all">
+          <button className="px-8 lg:px-10 py-4 lg:py-5 border border-white/20 font-black uppercase text-xs lg:text-sm tracking-widest hover:bg-white/10 transition-all hover:scale-105 active:scale-95">
             Partner with Us
           </button>
-        </div>
+        </motion.div>
+
       </motion.div>
 
       {/* 2. THE ECOSYSTEM GAP */}
