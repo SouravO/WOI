@@ -186,7 +186,7 @@ export default function WOISingularity() {
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="w-full h-full object-cover scale-110 opacity-60"
+            className="w-full h-full object-cover scale-[3.5] md:scale-110 opacity-60"
           ></iframe>
         </div>
 
@@ -211,7 +211,7 @@ export default function WOISingularity() {
           WOI is a decentralized ecosystem architecture firm. We design, establish, and scale the ventures that bridge the gaps between innovation, capital, and governance.
         </motion.p>
 
-       
+
 
       </motion.div>
 
